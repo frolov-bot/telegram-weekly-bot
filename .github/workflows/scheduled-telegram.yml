@@ -1,0 +1,22 @@
+name: Scheduled Telegram Message
+
+on:
+  schedule:
+    - cron: '0 9 * * 5'
+      timezone: 'Europe/Moscow'
+    - cron: '0 13 * * 0'
+      timezone: 'Europe/Moscow'
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send scheduled message to Telegram
+        run: |
+          curl -X POST "https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/sendMessage" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "chat_id": "${{ secrets.GROUP_CHAT_ID }}",
+            "text": "Всем привет! Это пятнично-воскресный волшебный пинг, о необходимости отправки информации по недельным действиям, в рамках отчета для CEO, по Заповедям. Чек-лист в закрепленном сообщении. Не благодарите)"
+          }'
